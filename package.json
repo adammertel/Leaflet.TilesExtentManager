@@ -1,0 +1,34 @@
+{
+  "name": "leaflet.tilesextentcontrol",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ň"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adammertel/Leaflet.TilesControl.git"
+  },
+  "keywords": [
+    "leaflet",
+    "tiles",
+    "control"
+  ],
+  "author": "Adam Mertel|UNIVIE",
+  "license": "ISC",
+  "devDependencies": {
+    "jshint": "^2.9.3",
+    "leaflet": "*",
+    "parallelshell": "^2.0.0",
+    "uglify-js": "^2.7.3"
+  },
+  "scripts": {
+    "jshint": "jshint src",
+    "concat-js": "uglifyjs \"src/*.js\" -o dist/leaflet-tilesextentcontrol.src.js -b --preamble \" /* Adam Mertel|UNIVIE */ \" --wrap ",
+    "minify-js": "uglifyjs dist/leaflet-tilesextentcontrol.src.js -o dist/leaflet-tilesextentcontrol.js -c -m --preamble \" /* Adam Mertel|UNIVIE */ \" --wrap ",
+    "onchange-js": "onchange src/**/*.js -- npm run build",
+    "build": "parallelshell \"npm run jshint\" \"npm run concat-js\" \"npm run minify-js\" ",
+    "start": "parallelshell \"npm run onchange-js\" \"npm run build\" "
+  }
+}
