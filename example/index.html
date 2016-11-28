@@ -49,13 +49,12 @@
       bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
     });
 
-    var BasemapAT_highdpi = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.{format}', {
-      maxZoom: 19,
-      attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
-      subdomains: ["", "1", "2", "3", "4"],
-      format: 'jpg',
-      opacity: 0.5,
-      bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    var BasemapAT_highdpi = L.tileLayer('https://maps{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.{format}', {
+    	maxZoom: 20,
+    	attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+    	subdomains: ["", "1", "2", "3", "4"],
+    	format: 'png',
+    	bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
     });
 
     var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -69,15 +68,6 @@
       subdomains: '1234',
       bounds: [[47.204642, 15.996093], [49.830896, 22.576904]],
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, vizualization CC-By-SA 2.0 <a href="http://freemap.sk">Freemap.sk</a>'
-    });
-
-    var Stamen_TopOSMRelief = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toposm-color-relief/{z}/{x}/{y}.{ext}', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      subdomains: 'abcd',
-      minZoom: 0,
-      maxZoom: 20,
-      ext: 'jpg',
-      bounds: [[22, -132], [51, -56]]
     });
 
     var OpenMapSurfer_Roads = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
@@ -98,23 +88,15 @@
       var austria = L.polygon(austriaPoints, {
         fillOpacity: 0
       }).addTo(map);
-      var usa = L.polygon([[22, -132], [22, -56], [51, -56], [51, -132], [22, -132]], {
-        fillOpacity: 0
-      }).addTo(map);
       var svk = L.polygon(svkPoints, {
         fillOpacity: 0
-      })//.addTo(map);
+      }).addTo(map);
 
       // ... "config file" that defines the rules, how to display layers
       // layers are ordered from most important to least important
       // transparent - defines, if we are able to display less important layer under this one
       // bounds - defines the geometry (now only polygons) that defines where the layer is relevant to display
       var layers = [{
-        name: 'usa_topo',
-        layer: Stamen_TopOSMRelief,
-        bounds: usa,
-        transparent: false
-      }, {
         name: 'baseAT_overlay',
         layer: BasemapAT_overlay,
         bounds: austria,
@@ -142,6 +124,18 @@
       }];
 
       map.createTilesExtentControlGroup(layers, {padding: 0.2});
+
+      map.on('move', function () {
+        setTimeout(function () {
+          document.getElementById("layers-list").innerHTML = '<p>DISPLAYED LAYERS:</p>';
+          for (var li in layers) {
+            var _layer2 = layers[li];
+            var htmlText = document.getElementById("layers-list").innerHTML;
+
+            document.getElementById("layers-list").innerHTML = htmlText + '<p>' + _layer2.name + ' - ' + _layer2.displayed + '</p>';
+          }
+        }, 500)
+      })
     }
 
     window.onload = function () {

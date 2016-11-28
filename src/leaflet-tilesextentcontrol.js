@@ -10,6 +10,7 @@
 
       for (var li in this.tilesGroup) {
         var layer = this.tilesGroup[li];
+				console.log(this.tilesGroup.length - li);
         layer.layer.setZIndex(this.tilesGroup.length - li);
         layer.layer.addTo(map);
         layer.originalBounds = layer.layer.originalBounds;
@@ -67,20 +68,6 @@
 
     _layerVisible: function (mapBounds, polygon) {
       return this._pointInsidePoints(mapBounds.getCenter(), polygon.getLatLngs()[0]);
-      // var boundsPoints = polygon.getLatLngs()[0];
-      //
-      // var inside = false;
-      //
-      // var mapCorners = [mapBounds.getCenter(), mapBounds.getSouthWest(), mapBounds.getNorthEast(), mapBounds.getNorthWest(), mapBounds.getSouthEast()];
-      //
-      // for (var mc in mapCorners) {
-      //   if (this._pointInsidePoints(mapCorners[mc], boundsPoints)) {
-      //     inside = true;
-      //     break;
-      //   }
-      // }
-      //
-      // return inside;
     },
 
     _refreshTilesGroup: function () {
@@ -99,14 +86,16 @@
 
         // if layer has no bounds we do not need to check it - but other layers will not be checked
         if (!layer.bounds) {
-          layer.willdisplay = true;
-          break;
+					layer.willdisplay = true;
+					if (!layer.transparent) {
+						break;
+					}
         } else {
 
           if (mapBounds.intersects(layer.bounds.getBounds())) {
             // if there is a chance to display
 
-            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs());
+            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
             var visibleLayer = false;
             if (visibleBounds) {
               visibleLayer = true;

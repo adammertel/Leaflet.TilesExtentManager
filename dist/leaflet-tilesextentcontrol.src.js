@@ -8,6 +8,7 @@
                 this.tilesGroup = tilesConfig;
                 for (var li in this.tilesGroup) {
                     var layer = this.tilesGroup[li];
+                    console.log(this.tilesGroup.length - li);
                     layer.layer.setZIndex(this.tilesGroup.length - li);
                     layer.layer.addTo(map);
                     layer.originalBounds = layer.layer.originalBounds;
@@ -63,10 +64,12 @@
                     layer = this.tilesGroup[li];
                     if (!layer.bounds) {
                         layer.willdisplay = true;
-                        break;
+                        if (!layer.transparent) {
+                            break;
+                        }
                     } else {
                         if (mapBounds.intersects(layer.bounds.getBounds())) {
-                            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs());
+                            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
                             var visibleLayer = false;
                             if (visibleBounds) {
                                 visibleLayer = true;
