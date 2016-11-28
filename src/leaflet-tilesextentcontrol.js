@@ -3,24 +3,22 @@
 	//var mapProto = L.extend({}, L.Map.prototype);
 
 	L.Map.include({
-    options: {
-      padding: 0.2
-    },
 
-    createTilesExtentControlGroup: function (tiles) {
+    createTilesExtentControlGroup: function (tilesConfig, options) {
+			L.setOptions(this, options);
       this.tilesGroup = tilesConfig;
 
       for (var li in this.tilesGroup) {
-        var layer = tilesGroup[li];
-        layer.layer.setZIndex(layers.length - li);
+        var layer = this.tilesGroup[li];
+        layer.layer.setZIndex(this.tilesGroup.length - li);
         layer.layer.addTo(map);
         layer.originalBounds = layer.layer.originalBounds;
         layer.displayed = false;
         layer.willdisplay = false;
       }
-
+			var that = this;
       this.on('moveend', function () {
-        this._refreshTilesGroup();
+        that._refreshTilesGroup();
       });
       this._refreshTilesGroup();
     },
@@ -42,7 +40,7 @@
       return inside;
     },
 
-    _boundsVisible: function (mapBounds, polygon) {
+    _boundsVisible: function (mapBounds, boundsPoints) {
       var visible = false;
 
       // is at least one vertex inside map bounds ?
@@ -108,7 +106,7 @@
           if (mapBounds.intersects(layer.bounds.getBounds())) {
             // if there is a chance to display
 
-            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds);
+            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs());
             var visibleLayer = false;
             if (visibleBounds) {
               visibleLayer = true;
@@ -145,7 +143,7 @@
             layer.layer.removeFrom(this);
           }
         }
-        layer.displayed = _layer.willdisplay;
+        layer.displayed = layer.willdisplay;
       }
     }
 

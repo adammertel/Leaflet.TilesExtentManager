@@ -1,0 +1,154 @@
+<!doctype html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css" />
+
+  <script src="./austria.js"></script>
+  <script src="./slovakia.js"></script>
+  <script src="./../src/leaflet-tilesextentcontrol.js"></script>
+
+  <style>
+    #map-wrapper {
+      width: 100%;
+      height: 500px
+    }
+  </style>
+</head>
+<body>
+  <div id="map-wrapper"></div>
+  <div id="time-info"></div>
+  <div id="layers-list"></div>
+
+  <script>
+
+    var map;
+
+    var austriaPoints = [];
+    L.geoJSON(austriaBounds, {
+      coordsToLatLng: function coordsToLatLng(coord) {
+        austriaPoints.push([coord[1], coord[0]]);
+        return false;
+      }
+    });
+
+    var svkPoints = [];
+    L.geoJSON(svkBounds, {
+      coordsToLatLng: function coordsToLatLng(coord) {
+        svkPoints.push([coord[1], coord[0]]);
+        return false;
+      }
+    });
+
+    // instances of L.tileLayer class
+    // BasemapAT_highdpi is set to transparent just to test whether we display OSM layer
+    var BasemapAT_overlay = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.{format}', {
+      maxZoom: 19,
+      attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+      subdomains: ["", "1", "2", "3", "4"],
+      format: 'png',
+      bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    });
+
+    var BasemapAT_highdpi = L.tileLayer('https://maps{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.{format}', {
+      maxZoom: 19,
+      attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+      subdomains: ["", "1", "2", "3", "4"],
+      format: 'jpg',
+      opacity: 0.5,
+      bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+    });
+
+    var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+
+    var FreeMapSK = L.tileLayer('http://t{s}.freemap.sk/T/{z}/{x}/{y}.jpeg', {
+      minZoom: 8,
+      maxZoom: 16,
+      subdomains: '1234',
+      bounds: [[47.204642, 15.996093], [49.830896, 22.576904]],
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, vizualization CC-By-SA 2.0 <a href="http://freemap.sk">Freemap.sk</a>'
+    });
+
+    var Stamen_TopOSMRelief = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/toposm-color-relief/{z}/{x}/{y}.{ext}', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      subdomains: 'abcd',
+      minZoom: 0,
+      maxZoom: 20,
+      ext: 'jpg',
+      bounds: [[22, -132], [51, -56]]
+    });
+
+    var OpenMapSurfer_Roads = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {
+      maxZoom: 20,
+      attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+
+
+    var init = function () {
+
+      // map initialisation
+      map = L.map('map-wrapper', {
+        center: [48, 13],
+        zoom: 6
+      });
+
+      // defining leaflet geometries that will be used in
+      var austria = L.polygon(austriaPoints, {
+        fillOpacity: 0
+      }).addTo(map);
+      var usa = L.polygon([[22, -132], [22, -56], [51, -56], [51, -132], [22, -132]], {
+        fillOpacity: 0
+      }).addTo(map);
+      var svk = L.polygon(svkPoints, {
+        fillOpacity: 0
+      })//.addTo(map);
+
+      // ... "config file" that defines the rules, how to display layers
+      // layers are ordered from most important to least important
+      // transparent - defines, if we are able to display less important layer under this one
+      // bounds - defines the geometry (now only polygons) that defines where the layer is relevant to display
+      var layers = [{
+        name: 'usa_topo',
+        layer: Stamen_TopOSMRelief,
+        bounds: usa,
+        transparent: false
+      }, {
+        name: 'baseAT_overlay',
+        layer: BasemapAT_overlay,
+        bounds: austria,
+        transparent: true
+      }, {
+        name: 'baseAT_highdpi',
+        layer: BasemapAT_highdpi,
+        bounds: austria,
+        transparent: false
+      }, {
+        name: 'FreeMapSK',
+        layer: FreeMapSK,
+        bounds: svk,
+        transparent: false
+      }, {
+        name: 'OSM',
+        layer: OpenStreetMap_Mapnik,
+        bounds: false,
+        transparent: false
+      }, {
+        name: 'OSM_surfer',
+        layer: OpenMapSurfer_Roads,
+        bounds: false,
+        transparent: false
+      }];
+
+      map.createTilesExtentControlGroup(layers, {padding: 0.2});
+    }
+
+    window.onload = function () {
+     init();
+    }
+
+  </script>
+</body >
+
+</html>
