@@ -5,12 +5,12 @@
 	L.Map.include({
 
     createTilesExtentControlGroup: function (tilesConfig, options) {
+			this.options.padding = 0.2;
 			L.setOptions(this, options);
       this.tilesGroup = tilesConfig;
 
       for (var li in this.tilesGroup) {
         var layer = this.tilesGroup[li];
-				console.log(this.tilesGroup.length - li);
         layer.layer.setZIndex(this.tilesGroup.length - li);
         layer.layer.addTo(map);
         layer.originalBounds = layer.layer.originalBounds;
@@ -55,7 +55,7 @@
       // if not, check if mapCorners are not in the different sides of that polygon
       if (!visible) {
         var cornersInside = [];
-        var mapCorners = [mapBounds.getSouthWest(), mapBounds.getNorthEast(), mapBounds.getNorthWest(), mapBounds.getSouthEast()];
+        var mapCorners = [mapBounds.getCenter(), mapBounds.getSouthWest(), mapBounds.getNorthEast(), mapBounds.getNorthWest(), mapBounds.getSouthEast()];
 
         for (var mc in mapCorners) {
           cornersInside[mc] = this._pointInsidePoints(mapCorners[mc], boundsPoints);

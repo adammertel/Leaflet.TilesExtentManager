@@ -4,11 +4,11 @@
     (function() {
         L.Map.include({
             createTilesExtentControlGroup: function(tilesConfig, options) {
+                this.options.padding = .2;
                 L.setOptions(this, options);
                 this.tilesGroup = tilesConfig;
                 for (var li in this.tilesGroup) {
                     var layer = this.tilesGroup[li];
-                    console.log(this.tilesGroup.length - li);
                     layer.layer.setZIndex(this.tilesGroup.length - li);
                     layer.layer.addTo(map);
                     layer.originalBounds = layer.layer.originalBounds;
