@@ -43,9 +43,9 @@ This is a js array that holds basic information about your TileLayers and their 
 
     // definition of TilesGroup array
     var layers = [{
-      name: 'usa_topo',
-      layer: Stamen_TopOSMRelief,
-      bounds: usa,
+      name: 'NLS',
+      layer: NLS,
+      bounds: L.polygon([[50, -8], [50, 2], [60, 2], [60, -8], [50, -8]]),
       transparent: false
     },{
       name: 'OSM_surfer',

@@ -43,7 +43,7 @@
                 }
                 if (!visible) {
                     var cornersInside = [];
-                    var mapCorners = [ mapBounds.getSouthWest(), mapBounds.getNorthEast(), mapBounds.getNorthWest(), mapBounds.getSouthEast() ];
+                    var mapCorners = [ mapBounds.getCenter(), mapBounds.getSouthWest(), mapBounds.getNorthEast(), mapBounds.getNorthWest(), mapBounds.getSouthEast() ];
                     for (var mc in mapCorners) {
                         cornersInside[mc] = this._pointInsidePoints(mapCorners[mc], boundsPoints);
                     }
