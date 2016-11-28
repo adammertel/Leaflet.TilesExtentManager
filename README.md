@@ -8,16 +8,16 @@ To enhance the leaflet performance in situations, where more overlapping tileLay
 
 ### How to use:
 * load src/leaflet-tilesextentcontrol.js
-* create an config array (seee TilesGroup Config section )
-* call method ``map.createTilesExtentControlGroup(<TilesGroup Config>)``
+* create a new TilesGroup config array (seee TilesGroup Config section )
+* call method ``createTilesExtentControlGroup(<TilesGroup Config>)`` on map and pass your TilesGroup array
 
 
 ### TilesGroup Config:
-This is a js array that holds basic information about your TileLayers and their order. First elements have the highest priority and will be displayed in front. Each element is an object that holds this parameters:
+This is a js array that holds basic information about your TileLayers and their order. First elements have the highest priority and will be displayed in the front. Each element is an object that holds this parameters:
  * name - this attribute is optional and would be used in the future
  * layer - L.TileLayer instance
  * bounds - polygon that defines extent of this layer. False if there are no boundaries
- * transparent - true, if we see through this layer
+ * transparent - true, if it is possible to see through this layer
 
 
 ### Example
@@ -36,6 +36,7 @@ This is a js array that holds basic information about your TileLayers and their 
     	subdomains: '0123'
     });
 
+    // initialize map
     var map = L.map('map-wrapper', {
       center: [48, 13],
       zoom: 6
@@ -60,7 +61,7 @@ This is a js array that holds basic information about your TileLayers and their 
 
 
 ### Notes
-The aim of this plugin is save requests on tiles that are not possible to display. On the other hand, it needs a calculation on each map change. This calculation does not take long time (in most cases < 2ms) but it means that this plugin is recomended only in specific situations:
+The aim of this plugin is to save some requests on tiles that are not possible to display. On the other hand, it needs a calculation on each map change (in most cases < 2ms) therefore this plugin is recommended only in specific situations:
  - when more tilesLayers with different extent are loaded at the same time
  - when server where tiles are hosted is slow
  - when users have slower internet connection
