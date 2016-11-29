@@ -67,3 +67,10 @@ The aim of this plugin is to save some requests on tiles that are not possible t
  - when users have slower internet connection
 
 This plugin is not fully tested yet. There are also more things to be implemented.
+
+
+### Idea
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+![Schema](schema.png "Schema")
