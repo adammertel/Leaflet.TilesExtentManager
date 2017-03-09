@@ -87,8 +87,8 @@
       }
 
       // iterating ordered layers
-      for (var li in this.tilesGroup) {
-        var layer = this.tilesGroup[li];
+      for (li in this.tilesGroup) {
+        layer = this.tilesGroup[li];
 
         if (this._isLayerWithinZoom(layer)) {
 
@@ -104,10 +104,10 @@
               // if there is a chance to display
 
               var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
+              
               var visibleLayer = false;
-              if (visibleBounds) {
-                visibleLayer = true;
-              } else {
+              
+              if (!visibleBounds) {
                 visibleLayer = this._layerVisible(mapBounds, layer.bounds);
               }
 

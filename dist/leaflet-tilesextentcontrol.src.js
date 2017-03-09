@@ -1,5 +1,3 @@
- /* Adam Mertel|UNIVIE */
-
 (function(exports, global) {
     (function() {
         L.Map.include({
@@ -54,6 +52,12 @@
             _layerVisible: function(mapBounds, polygon) {
                 return this._pointInsidePoints(mapBounds.getCenter(), polygon.getLatLngs()[0]);
             },
+            _isLayerWithinZoom: function(layer) {
+                var minZoom = parseInt(layer.layer.options.minZoom || 1);
+                var maxZoom = parseInt(layer.layer.options.maxZoom || 40);
+                var mapZoom = parseInt(this._zoom);
+                return !(mapZoom < minZoom || mapZoom > maxZoom);
+            },
             _refreshTilesGroup: function() {
                 var mapBounds = this.getBounds().pad(this.options.padding);
                 var li, layer;
@@ -62,27 +66,27 @@
                 }
                 for (li in this.tilesGroup) {
                     layer = this.tilesGroup[li];
-                    if (!layer.bounds) {
-                        layer.willdisplay = true;
-                        if (!layer.transparent) {
-                            break;
-                        }
-                    } else {
-                        if (mapBounds.intersects(layer.bounds.getBounds())) {
-                            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
-                            var visibleLayer = false;
-                            if (visibleBounds) {
-                                visibleLayer = true;
-                            } else {
-                                visibleLayer = this._layerVisible(mapBounds, layer.bounds);
+                    if (this._isLayerWithinZoom(layer)) {
+                        if (!layer.bounds) {
+                            layer.willdisplay = true;
+                            if (!layer.transparent) {
+                                break;
                             }
-                            if (visibleLayer || visibleBounds) {
-                                layer.willdisplay = true;
-                                if (layer.transparent) {
+                        } else {
+                            if (mapBounds.intersects(layer.bounds.getBounds())) {
+                                var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
+                                var visibleLayer = false;
+                                if (!visibleBounds) {
+                                    visibleLayer = this._layerVisible(mapBounds, layer.bounds);
+                                }
+                                if (visibleLayer || visibleBounds) {
                                     layer.willdisplay = true;
-                                } else {
-                                    if (!visibleBounds) {
-                                        break;
+                                    if (layer.transparent) {
+                                        layer.willdisplay = true;
+                                    } else {
+                                        if (!visibleBounds) {
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -93,6 +97,7 @@
                     layer = this.tilesGroup[li];
                     if (layer.willdisplay != layer.display) {
                         if (layer.willdisplay) {
+                            console.log(li);
                             layer.layer.addTo(this);
                         } else {
                             layer.layer.removeFrom(this);
