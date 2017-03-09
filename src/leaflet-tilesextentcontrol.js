@@ -1,7 +1,4 @@
 (function(){
-
-	//var mapProto = L.extend({}, L.Map.prototype);
-
 	L.Map.include({
 
     createTilesExtentControlGroup: function (tilesConfig, options) {
@@ -17,6 +14,7 @@
         layer.displayed = false;
         layer.willdisplay = false;
       }
+
 			var that = this;
       this.on('moveend', function () {
         that._refreshTilesGroup();
@@ -70,6 +68,14 @@
       return this._pointInsidePoints(mapBounds.getCenter(), polygon.getLatLngs()[0]);
     },
 
+    _isLayerWithinZoom: function (layer) {
+      var minZoom = parseInt(layer.layer.options.minZoom || 1);
+      var maxZoom = parseInt(layer.layer.options.maxZoom || 40);
+      var mapZoom = parseInt(this._zoom);
+  
+      return !(mapZoom < minZoom || mapZoom > maxZoom);
+    },
+
     _refreshTilesGroup: function () {
       // map bounds are extended so polygon bounds has not to be so precise
       var mapBounds = this.getBounds().pad(this.options.padding);
@@ -81,39 +87,42 @@
       }
 
       // iterating ordered layers
-      for (li in this.tilesGroup) {
-        layer = this.tilesGroup[li];
+      for (var li in this.tilesGroup) {
+        var layer = this.tilesGroup[li];
 
-        // if layer has no bounds we do not need to check it - but other layers will not be checked
-        if (!layer.bounds) {
-					layer.willdisplay = true;
-					if (!layer.transparent) {
-						break;
-					}
-        } else {
+        if (this._isLayerWithinZoom(layer)) {
 
-          if (mapBounds.intersects(layer.bounds.getBounds())) {
-            // if there is a chance to display
-
-            var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
-            var visibleLayer = false;
-            if (visibleBounds) {
-              visibleLayer = true;
-            } else {
-              visibleLayer = this._layerVisible(mapBounds, layer.bounds);
+          // if layer has no bounds we do not need to check it - but other layers will not be checked
+          if (!layer.bounds) {
+            layer.willdisplay = true;
+            if (!layer.transparent) {
+              break;
             }
+          } else {
 
-            // if layer should be displayed
-            if (visibleLayer || visibleBounds) {
-              layer.willdisplay = true;
+            if (mapBounds.intersects(layer.bounds.getBounds())) {
+              // if there is a chance to display
 
-              // if the layer is transparent, we have to continue with the iteration
-              if (layer.transparent) {
-                layer.willdisplay = true;
+              var visibleBounds = this._boundsVisible(mapBounds, layer.bounds.getLatLngs()[0]);
+              var visibleLayer = false;
+              if (visibleBounds) {
+                visibleLayer = true;
               } else {
-                // we can break the iteration when we do not see borders and layer is not transparent
-                if (!visibleBounds) {
-                  break;
+                visibleLayer = this._layerVisible(mapBounds, layer.bounds);
+              }
+
+              // if layer should be displayed
+              if (visibleLayer || visibleBounds) {
+                layer.willdisplay = true;
+
+                // if the layer is transparent, we have to continue with the iteration
+                if (layer.transparent) {
+                  layer.willdisplay = true;
+                } else {
+                  // we can break the iteration when we do not see borders and layer is not transparent
+                  if (!visibleBounds) {
+                    break;
+                  }
                 }
               }
             }
@@ -126,6 +135,7 @@
         if (layer.willdisplay != layer.display) {
           if (layer.willdisplay) {
             //_layer.layer.bounds = [[0,0], [0,0]]
+            console.log(li);
             layer.layer.addTo(this);
           } else {
             //_layer.layer.bounds = _layer.originalBounds;
@@ -135,6 +145,5 @@
         layer.displayed = layer.willdisplay;
       }
     }
-
   });
 })();
