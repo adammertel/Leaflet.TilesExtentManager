@@ -9,10 +9,12 @@
       for (var li in this.tilesGroup) {
         var layer = this.tilesGroup[li];
         layer.layer.setZIndex(this.tilesGroup.length - li);
-        layer.layer.addTo(map);
         layer.originalBounds = layer.layer.originalBounds;
         layer.displayed = false;
         layer.willdisplay = false;
+
+        layer.transparent = layer.transparent || false; 
+        layer.bounds = layer.bounds || layer.layer.bounds || false; 
       }
 
 			var that = this;
