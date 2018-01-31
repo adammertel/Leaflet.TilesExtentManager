@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "ň"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adammertel/Leaflet.TilesControl.git"
