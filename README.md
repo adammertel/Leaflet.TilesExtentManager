@@ -1,32 +1,30 @@
 # Leaflet.TilesExtentControl
 
 ### Description:
+
 Simple leaflet plugin that blocks downloading tiles that are overlaid by another layer.
 
-
-
 ### Motivation:
-To enhance the leaflet performance in situations, where more overlapping L.TileLayers are loaded and displayed. This plugin calculates which L.TileLayer is not possible to be seen and temporary removes it from the map.
 
-
+To enhance the leaflet performance in situations, when more overlapping L.TileLayers are loaded and displayed. This plugin calculates which L.TileLayer is not possible to be seen and temporary removes it from the map.
 
 ### How to use:
+
 * load src/leaflet-tilesextentcontrol.js
 * create a new TilesGroup config array (see TilesGroup Config section )
-* call method ``createTilesExtentControlGroup(<TilesGroup Config>)`` on map and pass your TilesGroup array
-
-
+* call method `createTilesExtentControlGroup(<TilesGroup Config>)` on map and pass your TilesGroup array
 
 ### TilesGroup Config:
+
 This is a structured js array that holds basic information about your L.TileLayers and their order. First elements have the highest priority and will be displayed in front of other layers. Each element is an object that holds this parameters:
- * **name** - this attribute is optional and would be (hopefully) used in the future
- * **layer** - L.TileLayer instance
- * **bounds** - polygon that defines extent of this layer. Has **false** if there are no boundaries
- * **transparent** - true, if it is possible to see through this layer
 
-
+* **name** - this attribute is optional and would be (hopefully) used in the future
+* **layer** - L.TileLayer instance
+* **bounds** - polygon that defines extent of this layer. Has **false** if there are no boundaries
+* **transparent** - true, if it is possible to see through this layer
 
 ### Example
+
 ```
   // initialize tileLayers
   var OpenMapSurfer_Roads = L.tileLayer('http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}', {  
@@ -64,26 +62,15 @@ This is a structured js array that holds basic information about your L.TileLaye
   map.createTilesExtentControlGroup(layers);
 ```
 
-
-
 ### Notes
+
 The aim of this plugin is to save some server requests on tiles that are not possible to display. On the other hand, it needs it's calculation on each map change (in most cases < 2ms) therefore this plugin is recommended only in specific situations:
- * when more tilesLayers with different extent are loaded at the same time
- * when server where tiles are hosted is slow
- * when users have slower internet connection
 
-
-
-### Current state
-This plugin is not fully tested yet. There are also more things to be implemented.
-TODO:
- * test it
- * find the way to not fully remove layer from the map
- * code refactoring
- * check low-end device performance changes
- * add options
-
-
+* when more tilesLayers with different extent are loaded at the same time
+* when server where tiles are hosted is slow
+* when users have slower internet connection
+* when tiles have big size
 
 ### Schema
-![Schema](schema.png "Schema")
+
+![Schema](schema.png 'Schema')
