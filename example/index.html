@@ -1,11 +1,12 @@
 <!doctype html>
+
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css" />
 
   <script src="./austria.js"></script>
   <script src="./slovakia.js"></script>
-  <script src="./../src/leaflet-tilesextentcontrol.js"></script>
+  <script src="./../dist/leaflet.tilesextentmanager.js"></script>
 
   <style>
     #map-wrapper {
@@ -14,6 +15,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="map-wrapper"></div>
   <div id="time-info"></div>
@@ -50,11 +52,11 @@
     });
 
     var BasemapAT_highdpi = L.tileLayer('https://maps{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.{format}', {
-    	maxZoom: 20,
-    	attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
-    	subdomains: ["", "1", "2", "3", "4"],
-    	format: 'png',
-    	bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+      maxZoom: 20,
+      attribution: 'Datenquelle: <a href="www.basemap.at">basemap.at</a>',
+      subdomains: ["", "1", "2", "3", "4"],
+      format: 'png',
+      bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
     });
 
     var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -97,16 +99,16 @@
       // transparent - defines, if we are able to display less important layer under this one
       // bounds - defines the geometry (now only polygons) that defines where the layer is relevant to display
       var layers = [{
-        name: 'baseAT_overlay',
+        name: 'austria overlay',
         layer: BasemapAT_overlay,
         bounds: austria,
         transparent: true
       }, {
-        name: 'baseAT_highdpi',
+        name: 'austria topomap',
         layer: BasemapAT_highdpi,
         bounds: austria,
       }, {
-        name: 'FreeMapSK',
+        name: 'slovakia tourist map (available from a certain zoom) ',
         layer: FreeMapSK,
         bounds: svk,
         transparent: false
@@ -114,32 +116,37 @@
         name: 'OSM',
         layer: OpenStreetMap_Mapnik
       }, {
-        name: 'OSM_surfer',
+        name: 'OSM_surfer (completely under the OSM layer)',
         layer: OpenMapSurfer_Roads,
         bounds: false,
         transparent: false
       }];
 
-      map.createTilesExtentControlGroup(layers);
+      map.createTilesExtentManagerGroup(layers);
 
       map.on('move', function () {
         setTimeout(function () {
-          document.getElementById("layers-list").innerHTML = '<p>DISPLAYED LAYERS:</p>';
-          for (var li in layers) {
-            var _layer2 = layers[li];
-            var htmlText = document.getElementById("layers-list").innerHTML;
-
-            document.getElementById("layers-list").innerHTML = htmlText + '<p>' + _layer2.name + ' - ' + _layer2.displayed + '</p>';
-          }
+          refreshListOfLayers(layers)
         }, 500)
       })
+      refreshListOfLayers(layers)
     }
 
     window.onload = function () {
-     init();
+      init();
+    }
+
+    var refreshListOfLayers = function (layers) {
+      document.getElementById("layers-list").innerHTML = '<p>DISPLAYED LAYERS:</p>';
+      for (var li in layers) {
+        var _layer2 = layers[li];
+        var htmlText = document.getElementById("layers-list").innerHTML;
+
+        document.getElementById("layers-list").innerHTML = htmlText + '<p>' + _layer2.name + ' - ' + _layer2.displayed + '</p>';
+      }
     }
 
   </script>
-</body >
+</body>
 
 </html>
