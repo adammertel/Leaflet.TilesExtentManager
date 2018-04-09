@@ -5,7 +5,7 @@
 */
 (function() {
     L.Map.include({
-        createTilesExtentControlGroup: function(tilesConfig, options) {
+        createTilesExtentManagerGroup: function(tilesConfig, options) {
             this.options.padding = .2;
             L.setOptions(this, options);
             this.tilesGroup = tilesConfig;
@@ -102,7 +102,6 @@
                 layer = this.tilesGroup[li];
                 if (layer.willdisplay != layer.display) {
                     if (layer.willdisplay) {
-                        console.log(li);
                         layer.layer.addTo(this);
                     } else {
                         layer.layer.removeFrom(this);

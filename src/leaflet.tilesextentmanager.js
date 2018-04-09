@@ -1,6 +1,6 @@
 (function() {
   L.Map.include({
-    createTilesExtentControlGroup: function(tilesConfig, options) {
+    createTilesExtentManagerGroup: function(tilesConfig, options) {
       this.options.padding = 0.2;
       L.setOptions(this, options);
       this.tilesGroup = tilesConfig;
@@ -152,7 +152,6 @@
         if (layer.willdisplay != layer.display) {
           if (layer.willdisplay) {
             //_layer.layer.bounds = [[0,0], [0,0]]
-            console.log(li);
             layer.layer.addTo(this);
           } else {
             //_layer.layer.bounds = _layer.originalBounds;

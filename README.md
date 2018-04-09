@@ -1,4 +1,4 @@
-# Leaflet.TilesExtentControl
+# Leaflet.TilesExtentManager
 
 ### Description:
 
@@ -10,9 +10,9 @@ To enhance the leaflet performance in situations, when more overlapping L.TileLa
 
 ### How to use:
 
-* load src/leaflet-tilesextentcontrol.js
+* load src/leaflet-tilesextentmanager.js
 * create a new TilesGroup config array (see TilesGroup Config section )
-* call method `createTilesExtentControlGroup(<TilesGroup Config>)` on map and pass your TilesGroup array
+* call method `createTilesExtentManagerGroup(<TilesGroup Config>)` on map and pass your TilesGroup array
 
 ### TilesGroup Config:
 
@@ -59,7 +59,7 @@ This is a structured js array that holds basic information about your L.TileLaye
   }];
 
   // adding TilesGroup to map
-  map.createTilesExtentControlGroup(layers);
+  map.createTilesExtentManagerGroup(layers);
 ```
 
 ### Notes
