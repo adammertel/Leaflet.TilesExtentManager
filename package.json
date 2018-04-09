@@ -1,34 +1,37 @@
 {
-  "name": "leaflet.tilesextentcontrol",
+  "name": "leaflet.tilesextentmanager",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adammertel/Leaflet.TilesControl.git"
+    "url": "git+https://github.com/adammertel/Leaflet.TilesExtentManager"
   },
-  "keywords": [
-    "leaflet",
-    "tiles",
-    "control"
-  ],
-  "author": "Adam Mertel|UNIVIE",
+  "keywords": ["leaflet", "tiles", "control"],
+  "author": "Adam Mertel | univie",
   "license": "ISC",
-  "devDependencies": {
-    "jshint": "^2.9.3",
-    "leaflet": "*",
-    "parallelshell": "^2.0.0",
-    "uglify-js": "^2.7.3",
-    "onchange": "*"
-  },
+  "devDependencies": {},
   "scripts": {
     "jshint": "jshint src",
-    "concat-js": "uglifyjs \"src/*.js\" -o dist/leaflet-tilesextentcontrol.src.js -b --preamble \" /* Adam Mertel|UNIVIE */ \" --wrap ",
-    
-    "minify-js": "uglifyjs dist/leaflet-tilesextentcontrol.src.js -o dist/leaflet-tilesextentcontrol.js -c -m --preamble \" /* Adam Mertel|UNIVIE */ \" --wrap ",
-    "onchange-js": "onchange src/**/*.js -- npm run build",
-    
-    "build": "parallelshell \"npm run jshint\" \"npm run concat-js\" \"npm run minify-js\" ",
-    "start": "parallelshell \"npm run onchange-js\" \"npm run build\" "
+
+    "banners": "run-s banner-src banner-js",
+    "banner-src":
+      "concat-cli -f banner dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.src.js",
+    "banner-js":
+      "concat-cli -f banner dist/leaflet.tilesextentmanager.js -o dist/leaflet.tilesextentmanager.js",
+
+    "concat":
+      "uglifyjs \"src/*.js\" -o dist/leaflet.tilesextentmanager.src.js -b",
+    "minify":
+      "uglifyjs dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.js -c -m",
+    "onchange": "onchange src/**/*.js -- npm run build",
+    "build": "run-s jshint concat minify banners",
+    "start": "run-p onchange build"
+  },
+  "dependencies": {
+    "jshint": "^2.9.5",
+    "npm-run-all": "^4.1.2",
+    "onchange": "^3.3.0",
+    "uglify-js": "^3.3.20"
   }
 }
