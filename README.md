@@ -1,18 +1,32 @@
 # Leaflet.TilesExtentManager
 
+### Demo:
+[demo](https://adammertel.github.io/Leaflet.TilesExtentManager/example/index.html)
+
+
 ### Description:
 
 Simple leaflet plugin that blocks downloading tiles that are overlaid by another layer.
 
+
 ### Motivation:
 
 To enhance the leaflet performance in situations, when more overlapping L.TileLayers are loaded and displayed. This plugin calculates which L.TileLayer is not possible to be seen, and temporarily removes it from the map until the moment it can be seen.
+
 
 ### How to use:
 
 * load src/leaflet-tilesextentmanager.js
 * create a new TilesGroup config array (see TilesGroup Config section )
 * call method `createTilesExtentManagerGroup(<TilesGroup Config>)` on map and pass your TilesGroup array
+
+
+### How to build | develop:
+
+* clone / fork / download
+* `npm install`
+* `npm start` for develop | `npm run build` for build
+
 
 ### TilesGroup Config:
 
@@ -22,6 +36,7 @@ Config is a structured js array that holds basic information about your L.TileLa
 * **layer** - L.TileLayer instance
 * **bounds** - a polygon that defines the extent of this layer. Is **false** when there are no boundaries
 * **transparent** - true, if it is possible to see through this layer
+
 
 ### Example
 
@@ -62,6 +77,7 @@ Config is a structured js array that holds basic information about your L.TileLa
  map.createTilesExtentManagerGroup(layers);
 ```
 
+
 ### Notes
 
 This plugin aims to save some server requests on tiles that are not possible to display. On the other hand, it needs a calculation on each map change (in most cases < 2ms); therefore, this plugin is recommended only in specific situations:
@@ -70,6 +86,7 @@ This plugin aims to save some server requests on tiles that are not possible to 
 * when slow tile server
 * when users have a slower internet connection
 * when tiles have big size
+
 
 ### Schema
 
