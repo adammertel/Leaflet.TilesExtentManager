@@ -1,8 +1,8 @@
 <!doctype html>
 
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
 
   <script src="./austria.js"></script>
   <script src="./slovakia.js"></script>
@@ -23,23 +23,10 @@
 
   <script>
 
-    var map;
+    // boundaries of Slovakia and Austria - will be then set as boundaries of L.tileLayer
+    var austriaPoints = austriaBounds.features[0].geometry.coordinates[0].map(coord => [coord[1], coord[0]])
+    var svkPoints = svkBounds.features[0].geometry.coordinates[0].map(coord => [coord[1], coord[0]])
 
-    var austriaPoints = [];
-    L.geoJSON(austriaBounds, {
-      coordsToLatLng: function coordsToLatLng(coord) {
-        austriaPoints.push([coord[1], coord[0]]);
-        return false;
-      }
-    });
-
-    var svkPoints = [];
-    L.geoJSON(svkBounds, {
-      coordsToLatLng: function coordsToLatLng(coord) {
-        svkPoints.push([coord[1], coord[0]]);
-        return false;
-      }
-    });
 
     // instances of L.tileLayer class
     // BasemapAT_highdpi is set to transparent just to test whether we display OSM layer
@@ -78,10 +65,10 @@
     });
 
 
-    var init = function () {
+    var init = () => {
 
       // map initialisation
-      map = L.map('map-wrapper', {
+      var map = L.map('map-wrapper', {
         center: [48, 13],
         zoom: 6
       });
@@ -94,10 +81,10 @@
         fillOpacity: 0
       }).addTo(map);
 
-      // ... "config file" that defines the rules, how to display layers
+      // ... "config file" that defines the rules to display layers
       // layers are ordered from most important to least important
       // transparent - defines, if we are able to display less important layer under this one
-      // bounds - defines the geometry (now only polygons) that defines where the layer is relevant to display
+      // bounds - defines the geometry (now only polygons) where the layer is relevant to display
       var layers = [{
         name: 'austria overlay',
         layer: BasemapAT_overlay,
@@ -124,24 +111,23 @@
 
       map.createTilesExtentManagerGroup(layers);
 
-      map.on('move', function () {
-        setTimeout(function () {
+      map.on('move', () => {
+        setTimeout( () => {
           refreshListOfLayers(layers)
         }, 500)
       })
       refreshListOfLayers(layers)
     }
 
-    window.onload = function () {
+    window.onload = () => {
       init();
     }
 
-    var refreshListOfLayers = function (layers) {
+    var refreshListOfLayers = (layers) => {
       document.getElementById("layers-list").innerHTML = '<p>DISPLAYED LAYERS:</p>';
       for (var li in layers) {
         var _layer2 = layers[li];
         var htmlText = document.getElementById("layers-list").innerHTML;
-
         document.getElementById("layers-list").innerHTML = htmlText + '<p>' + _layer2.name + ' - ' + _layer2.displayed + '</p>';
       }
     }
