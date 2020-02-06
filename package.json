@@ -1,37 +1,35 @@
 {
-  "name": "leaflet.tilesextentmanager",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/adammertel/Leaflet.TilesExtentManager"
-  },
-  "keywords": ["leaflet", "tiles", "control"],
-  "author": "Adam Mertel | univie",
-  "license": "ISC",
-  "devDependencies": {},
-  "scripts": {
-    "jshint": "jshint src",
-
-    "banners": "run-s banner-src banner-js",
-    "banner-src":
-      "concat-cli -f banner dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.src.js",
-    "banner-js":
-      "concat-cli -f banner dist/leaflet.tilesextentmanager.js -o dist/leaflet.tilesextentmanager.js",
-
-    "concat":
-      "uglifyjs \"src/*.js\" -o dist/leaflet.tilesextentmanager.src.js -b",
-    "minify":
-      "uglifyjs dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.js -c -m",
-    "onchange": "onchange src/**/*.js -- npm run build",
-    "build": "run-s jshint concat minify banners",
-    "start": "run-p onchange build"
-  },
-  "dependencies": {
-    "jshint": "^2.9.5",
-    "npm-run-all": "^4.1.2",
-    "onchange": "^3.3.0",
-    "uglify-js": "^3.3.20"
-  }
+	"name": "leaflet.tilesextentmanager",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/adammertel/Leaflet.TilesExtentManager"
+	},
+	"keywords": [
+		"leaflet",
+		"tiles",
+		"control"
+	],
+	"author": "Adam Mertel | univie",
+	"license": "ISC",
+	"devDependencies": {},
+	"scripts": {
+		"jshint": "jshint src",
+		"banners": "run-s banner-src banner-js",
+		"banner-src": "concat-cli -f banner dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.src.js",
+		"banner-js": "concat-cli -f banner dist/leaflet.tilesextentmanager.js -o dist/leaflet.tilesextentmanager.js",
+		"concat": "uglifyjs \"src/*.js\" -o dist/leaflet.tilesextentmanager.src.js -b",
+		"minify": "uglifyjs dist/leaflet.tilesextentmanager.src.js -o dist/leaflet.tilesextentmanager.js -c -m",
+		"onchange": "onchange src/**/*.js -- npm run build",
+		"build": "run-s jshint concat minify banners",
+		"start": "run-p onchange build"
+	},
+	"dependencies": {
+		"jshint": "^2.9.5",
+		"npm-run-all": "^4.1.2",
+		"onchange": "^6.1.0",
+		"uglify-js": "^3.3.20"
+	}
 }
