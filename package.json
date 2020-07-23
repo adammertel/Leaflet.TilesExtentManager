@@ -7,7 +7,11 @@
 		"type": "git",
 		"url": "git+https://github.com/adammertel/Leaflet.TilesExtentManager"
 	},
-	"keywords": [ "leaflet", "tiles", "control" ],
+	"keywords": [
+		"leaflet",
+		"tiles",
+		"control"
+	],
 	"author": "Adam Mertel | univie",
 	"license": "ISC",
 	"devDependencies": {},
